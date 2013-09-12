@@ -5,10 +5,7 @@
  * @package wayfinder
  * @subpackage build
  */
-$mtime = microtime();
-$mtime = explode(" ", $mtime);
-$mtime = $mtime[1] + $mtime[0];
-$tstart = $mtime;
+$tstart = microtime(true);
 /* get rid of time limit */
 set_time_limit(0);
 $root = dirname(dirname(__FILE__)).'/';
@@ -21,19 +18,18 @@ $sources= array (
 );
 
 /* override with your own defines here (see build.config.sample.php) */
-require_once $sources['build'] . 'build.config.php';
+require_once dirname(__FILE__) . '/build.config.php';
 require_once MODX_CORE_PATH . 'model/modx/modx.class.php';
 
 $modx= new modX();
 $modx->initialize('mgr');
-echo '<pre>'; /* used for nice formatting of log messages */
 $modx->setLogLevel(modX::LOG_LEVEL_INFO);
-$modx->setLogTarget('ECHO');
+$modx->setLogTarget(XPDO_CLI_MODE ? 'ECHO' : 'HTML');
 
 
 $modx->loadClass('transport.modPackageBuilder','',false, true);
 $builder = new modPackageBuilder($modx);
-$builder->createPackage('wayfinder','2.3.3','pl');
+$builder->createPackage('wayfinder','2.4.0','beta');
 $builder->registerNamespace('wayfinder',false,true,'{core_path}components/wayfinder/');
 
 /* get the source from the actual snippet in your database
@@ -43,7 +39,7 @@ $builder->registerNamespace('wayfinder',false,true,'{core_path}components/wayfin
 $c= $modx->newObject('modSnippet');
 $c->set('id',1);
 $c->set('name', 'Wayfinder');
-$c->set('description', 'Wayfinder for MODx Revolution 2.0.0-beta-5 and later.');
+$c->set('description', 'Wayfinder for MODx Revolution.');
 $c->set('snippet', file_get_contents($sources['source_core'] . '/wayfinder.snippet.php'));
 $c->set('category', 0);
 $properties = include $sources['data'].'properties.inc.php';
@@ -71,13 +67,9 @@ $builder->setPackageAttributes(array(
 
 $builder->pack();
 
-$mtime= microtime();
-$mtime= explode(" ", $mtime);
-$mtime= $mtime[1] + $mtime[0];
-$tend= $mtime;
-$totalTime= ($tend - $tstart);
+$totalTime= (microtime(true) - $tstart);
 $totalTime= sprintf("%2.4f s", $totalTime);
 
-$modx->log(modX::LOG_LEVEL_INFO,"\n<br />Package Built.<br />\nExecution time: {$totalTime}\n");
+$modx->log(modX::LOG_LEVEL_INFO, "Wayfinder package built in {$totalTime}\n");
 
 exit ();

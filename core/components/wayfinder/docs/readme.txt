@@ -1,11 +1,12 @@
 ::::::::::::::::::::::::::::::::::::::::
  Snippet name: Wayfinder
  Short Desc: builds site navigation
- Version: 2.3.0 (Revolution compatible)
- Authors: 
+ Version: 2.4.0 (Revolution compatible)
+ Authors:
     Kyle Jaebker (muddydogpaws.com)
     Ryan Thrash (vertexworks.com)
     Shaun McCormick (splittingred.com)
+    Jason Coward (opengeek.com)
  ::::::::::::::::::::::::::::::::::::::::
 Description:
     Totally refactored from original DropMenu nav builder to make it easier to

@@ -8,7 +8,6 @@
  * including tables, unordered- or ordered-lists (ULs or OLs), definition lists
  * (DLs) or in any other format you desire.
  *
- * @version 2.1.1-beta5
  * @author Garry Nutting (collabpad.com)
  * @author Kyle Jaebker (muddydogpaws.com)
  * @author Ryan Thrash (modx.com)
@@ -19,7 +18,7 @@
  *
  * @var modX $modx
  * @var array $scriptProperties
- * 
+ *
  * @package wayfinder
  */
 $wayfinder_base = $modx->getOption('wayfinder.core_path',$scriptProperties,$modx->getOption('core_path').'components/wayfinder/');
