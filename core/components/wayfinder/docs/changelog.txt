@@ -1,5 +1,7 @@
 Changelog for Wayfinder (for Revolution).
 
+- [#51] Avoid fatal error when Resource is not set
+
 Wayfinder 2.3.3
 ====================================
 - [#40] Add wf.level placeholder to items for showing current depth
