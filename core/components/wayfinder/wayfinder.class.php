@@ -644,7 +644,7 @@ class Wayfinder {
                 $resultIds[] = $tempDocInfo['id'];
                 $tempDocInfo['content'] = $tempDocInfo['class_key'] == 'modWebLink' ? $tempDocInfo['content'] : '';
                 /* create the link */
-                $linkScheme = $this->_config['fullLink'] ? 'full' : '';
+                $linkScheme = $this->_config['fullLink'] ? 'full' : $this->modx->getOption('link_tag_scheme',null,'');
                 if (!empty($this->_config['scheme'])) $linkScheme = $this->_config['scheme'];
 
                 if ($this->_config['useWeblinkUrl'] !== 'false' && $tempDocInfo['class_key'] == 'modWebLink') {
