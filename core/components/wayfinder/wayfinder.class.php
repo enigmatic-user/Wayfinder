@@ -35,9 +35,9 @@ class Wayfinder {
 
     function __construct(modX &$modx,array $config = array()) {
         $this->modx =& $modx;
-        
+
         /* Make sure we actually have a Resource. */
-        $fromID = !empty($this->modx->resource) 
+        $fromID = !empty($this->modx->resource)
                 ? $this->modx->resource->get('id')
                 : 0;
 
@@ -73,7 +73,7 @@ class Wayfinder {
         }
         if (isset($config['startId'])) { $this->_config['id'] = $config['startId']; }
         if (isset($config['removeNewLines'])) { $this->_config['nl'] = ''; }
-        
+
         if (isset($this->_config['contexts'])) {
             $this->_config['contexts'] = preg_replace('/,  +/', ',', $this->_config['contexts']);
         }
@@ -134,7 +134,7 @@ class Wayfinder {
 
     /**
      * Attempt to get the result set from the cache
-     * 
+     *
      * @return array Cached result set, if existent
      */
     public function getFromCache() {
@@ -164,7 +164,7 @@ class Wayfinder {
      */
     public function getCacheKeys() {
         if (!empty($this->_cacheKeys)) return $this->_cacheKeys;
-        
+
         /* generate a UID based on the params passed to Wayfinder and the resource ID
          * and the User ID (so that permissions get correctly applied) */
         $cacheKey = 'wf-'.$this->modx->user->get('id').'-'.base64_encode(serialize($this->_config));
@@ -338,7 +338,7 @@ class Wayfinder {
         $placeholders['wf.docid'] = $resource['id'];
         $placeholders['wf.subitemcount'] = $numChildren;
         $placeholders['wf.attributes'] = $resource['link_attributes'];
-		
+
         if (!empty($this->tvList)) {
             $usePlaceholders = array_merge($placeholders,$this->placeHolders['tvs']);
             foreach ($this->tvList as $tvName) {
@@ -361,7 +361,7 @@ class Wayfinder {
         $chunk = $this->modx->newObject('modChunk');
         $chunk->setCacheable(false);
         $output .= $chunk->process($placeholders, $useChunk);
-		
+
         /* return the row */
         $separator = $this->modx->getOption('nl',$this->_config,"\n");
         return $output . $separator;
@@ -556,7 +556,7 @@ class Wayfinder {
             if (!empty($this->_config['excludeDocs'])) {
                 $c->where(array('modResource.id:NOT IN' => explode(',',$this->_config['excludeDocs'])));
             }
-            
+
             /* add the limit to the query */
             if (!empty($this->_config['limit'])) {
                 $offset = !empty($this->_config['offset']) ? $this->_config['offset'] : 0;
@@ -778,38 +778,22 @@ class Wayfinder {
      * @return string|bool Template HTML or false if no template was found
      */
     public function fetch($tpl) {
-        /** @var modChunk $chunk */
-        if ($chunk= $this->modx->getObject('modChunk', array ('name' => $tpl), true)) {
-            $template = $chunk->getContent();
-        } else if(substr($tpl, 0, 6) == "@FILE:") {
-            $template = $this->get_file_contents(substr($tpl, 6));
-        } else if(substr($tpl, 0, 6) == "@CODE:") {
-            $template = substr($tpl, 6);
-        } else if(substr($tpl, 0, 5) == "@FILE") {
-            $template = $this->get_file_contents(trim(substr($tpl, 5)));
-        } else if(substr($tpl, 0, 5) == "@CODE") {
-            $template = trim(substr($tpl, 5));
-        } else {
-            $template = false;
+        $template = false;
+        if (!empty($tpl)) {
+            /** @var modChunk $chunk */
+            if ($chunk= $this->modx->getParser()->getElement('modChunk', $tpl)) {
+                $template = $chunk->getContent();
+            } else if(substr($tpl, 0, 6) == "@FILE:") {
+                $template = file_get_contents(substr($tpl, 6));
+            } else if(substr($tpl, 0, 6) == "@CODE:") {
+                $template = substr($tpl, 6);
+            } else if(substr($tpl, 0, 5) == "@FILE") {
+                $template = file_get_contents(trim(substr($tpl, 5)));
+            } else if(substr($tpl, 0, 5) == "@CODE") {
+                $template = trim(substr($tpl, 5));
+            }
         }
         return $template;
-    }
-
-    /**
-     * Substitute function for file_get_contents()
-     *
-     * @param string $filename Name of file to be fetched
-     * @return string The file contents
-     */
-    public function get_file_contents($filename) {
-        if (!function_exists('file_get_contents')) {
-            $fhandle = fopen($filename, "r");
-            $fcontents = fread($fhandle, filesize($filename));
-            fclose($fhandle);
-        } else  {
-            $fcontents = file_get_contents($filename);
-        }
-        return $fcontents;
     }
 
     public function findTemplateVars($tpl) {
