@@ -439,7 +439,7 @@ class Wayfinder {
     /**
      * Determine the "you are here" point in the menu
      *
-     * @param $did Document ID to find
+     * @param string|int $did Document ID to find
      * @return bool Returns true if the document ID was found
      */
     public function isHere($did) {
