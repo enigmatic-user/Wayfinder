@@ -236,6 +236,13 @@ class Wayfinder {
             } else {
                 $docInfo['last'] = 0;
             }
+
+            if($counter % 2) {
+                $docInfo['odd'] = 1;
+            } else {
+                $docInfo['odd'] = 0;
+            }
+
             /* determine if resource has children */
             $docInfo['hasChildren'] = in_array($docInfo['id'],$this->hasChildren) ? 1 : 0;
             $numChildren = $docInfo['hasChildren'] ? count($this->docs[$level+1][$docInfo['id']]) : 0;
@@ -315,7 +322,7 @@ class Wayfinder {
         $useChunk = $this->_templates[$usedTemplate];
         /* setup the new wrapper name and get the class names */
         $useSub = $resource['hasChildren'] ? "[[+wf.wrapper.{$resource['id']}]]" : "";
-        $classNames = $this->setItemClass('rowcls',$resource['id'],$resource['first'],$resource['last'],$resource['level'],$resource['isfolder'],$resource['class_key']);
+        $classNames = $this->setItemClass('rowcls',$resource['id'],$resource['first'],$resource['last'],$resource['level'],$resource['isfolder'],$resource['class_key'], $resource['odd']);
         $useClass = $classNames ? ' class="' . $classNames . '"' : '';
         /* setup the row id if a prefix is specified */
         if ($this->_config['rowIdPrefix']) {
@@ -379,7 +386,7 @@ class Wayfinder {
      * @param string $type Resource type of the item being processed
      * @return string The class string to use
      */
-    public function setItemClass($classType, $docId = 0, $first = 0, $last = 0, $level = 0, $isFolder = 0, $type = 'modDocument') {
+    public function setItemClass($classType, $docId = 0, $first = 0, $last = 0, $level = 0, $isFolder = 0, $type = 'modDocument', $oddClass = 0) {
         $returnClass = '';
         $hasClass = 0;
 
@@ -430,6 +437,11 @@ class Wayfinder {
             /* set class for weblink */
             if (!empty($this->_css['weblink']) && $type == 'modWebLink') {
                 $returnClass .= $hasClass ? ' ' . $this->_css['weblink'] : $this->_css['weblink'];
+                $hasClass = 1;
+            }
+            /* set class for odd */
+            if ($oddClass && !empty($this->_css['odd'])) {
+                $returnClass .= $hasClass ? ' ' . $this->_css['odd'] : $this->_css['odd'];
                 $hasClass = 1;
             }
         }

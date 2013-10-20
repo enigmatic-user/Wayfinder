@@ -53,7 +53,8 @@ $wf->_css = array(
     'inner' => isset($innerClass) ? $innerClass : '',
     'level' => isset($levelClass) ? $levelClass: '',
     'self' => isset($selfClass) ? $selfClass : '',
-    'weblink' => isset($webLinkClass) ? $webLinkClass : ''
+    'weblink' => isset($webLinkClass) ? $webLinkClass : '',
+    'odd' => isset($oddClass) ? $oddClass : ''
 );
 
 /* get user templates
