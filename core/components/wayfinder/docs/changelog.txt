@@ -3,6 +3,8 @@ Changelog for Wayfinder (for Revolution).
 - Optimize checkTemplates() and fetch() methods
 - [#56] Use link_tag_scheme if fullLink and scheme not set
 - [#51] Avoid fatal error when Resource is not set
+- Add German lexicon topics
+- Added oddClass parameter to support browsers without :nth-child(odd) CSS selector
 
 Wayfinder 2.3.3
 ====================================
